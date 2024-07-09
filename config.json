@@ -1,0 +1,5 @@
+{
+    "google_redirect_url": "http://localhost:8080/google/callback",
+    "microsoft_redirect_url": "http://localhost:8080/microsoft/callback"
+  }
+  
