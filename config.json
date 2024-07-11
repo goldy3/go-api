@@ -1,5 +1,5 @@
 {
-    "google_redirect_url": "http://localhost:8080/google/callback",
-    "microsoft_redirect_url": "http://localhost:8080/microsoft/callback"
+    "google_redirect_url": "https://go-api.demo-ns.com/google/callback",
+    "microsoft_redirect_url": "http://go-api.demo-ns.com/microsoft/callback"
   }
   
