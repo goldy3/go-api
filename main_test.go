@@ -18,7 +18,8 @@ func TestGoogleCallback(t *testing.T) {
 	os.Setenv("GO_ENV", "test")
 
 	// Initialize the database connection for testing
-	init()
+	initializeDatabase()
+	initializeOAuthConfig()
 
 	// Create a test HTTP server
 	router := gin.Default()

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -31,24 +30,12 @@ var microsoftOauthConfig *oauth2.Config
 var oauthStateString = "random"
 var db *gorm.DB
 
-func init() {
+func initializeDatabase() {
 	// Load environment variables from .env file
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
-
-	// Load JSON configuration file
-	file, err := os.Open("config.json")
-	if err != nil {
-		log.Fatalf("Error opening config file: %v", err)
-	}
-	defer file.Close()
-
-	byteValue, _ := ioutil.ReadAll(file)
-
-	var config Config
-	json.Unmarshal(byteValue, &config)
 
 	// Use test database if running tests
 	dsn := os.Getenv("DATABASE_URL")
@@ -64,6 +51,20 @@ func init() {
 	gormDB.AutoMigrate(&User{})
 
 	db = gormDB
+}
+
+func initializeOAuthConfig() {
+	// Load JSON configuration file
+	file, err := os.Open("config.json")
+	if err != nil {
+		log.Fatalf("Error opening config file: %v", err)
+	}
+	defer file.Close()
+
+	byteValue, _ := io.ReadAll(file)
+
+	var config Config
+	json.Unmarshal(byteValue, &config)
 
 	// Google OAuth configuration
 	googleOauthConfig = &oauth2.Config{
@@ -82,6 +83,11 @@ func init() {
 		Scopes:       []string{"https://graph.microsoft.com/User.Read"},
 		Endpoint:     microsoft.AzureADEndpoint("common"),
 	}
+}
+
+func init() {
+	initializeDatabase()
+	initializeOAuthConfig()
 }
 
 type User struct {
